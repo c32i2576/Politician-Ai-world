@@ -1,7 +1,14 @@
 # 優先三項設計建議：法案 + 時間模型 + 媒體層
 
-> 設計日期：2026-04-29
-> 對應缺口：[architecture-gaps.md](architecture-gaps.md) 第 1、2、3 項與「建議優先補的三項」
+> ⚠️ **此檔已歸檔** — 內容已拆分並升級至：
+> - §1 法案模型 → [../design/bill-model.md](../design/bill-model.md)
+> - §2 時間模型 → [../design/time-model.md](../design/time-model.md)（v2，事件驅動）
+> - §3 媒體層 → [../design/media-model.md](../design/media-model.md)（v2，三通道）
+>
+> 保留此檔作為歷史參考，**新工作請使用上述 current 版本**。
+
+> 版本：1 ｜ 設計日期：2026-04-29 ｜ 狀態：archived
+> 對應缺口：[../02-gaps.md](../02-gaps.md) 第 1、2、3 項
 > 目的：在進入 PoC 實作前，把引擎跑得起來最關鍵的三個子系統釘下具體設計
 
 ---
@@ -97,6 +104,9 @@ billVotes: defineTable({
 
 ## 2. 時間／會期模型
 
+> **本節已被 [../design/time-model.md](../design/time-model.md) 取代**（事件驅動 session + per-topic λ 衰減）。以下保留為歷史參考。
+
+
 ### 2.1 三層時鐘
 
 ```
@@ -132,7 +142,7 @@ const CLOCK_CONFIG = {
 | 每 period | 會期結算：未過法案歸檔；派系重整 |
 | 每 term | 選舉：席次變動；民意 reset |
 
-### 2.4 衰減公式（補回 architecture-research.md 缺的部分）
+### 2.4 衰減公式（補回 ../01-research.md 缺的部分）
 
 ```python
 # 記憶相關性評分
@@ -150,11 +160,13 @@ public_stance_t+1 = hidden + (public_stance_t - hidden) * exp(-Δt / τ_stance)
 
 ### 2.5 集中常數
 
-把 `CLOCK_CONFIG` + `InstitutionalRules` + 各 τ 值集中在 `simulationConstants.ts`，方便日後做 rule-pack 切換（對應 [architecture-gaps.md](architecture-gaps.md) #16 在地化問題）。
+把 `CLOCK_CONFIG` + `InstitutionalRules` + 各 τ 值集中在 `simulationConstants.ts`，方便日後做 rule-pack 切換（對應 [../02-gaps.md](../02-gaps.md) #16 在地化問題）。
 
 ---
 
 ## 3. 媒體與輿論層
+
+> **本節已被 [../design/media-model.md](../design/media-model.md) 取代**（三通道分離、`apply_news_to_opinion` 公式、規則式 media_tick）。以下保留為歷史參考。
 
 ### 3.1 三層架構
 
@@ -255,7 +267,7 @@ def get_spotlight(agent, topic, time_window_days=3):
     return sum(item.spotlightLevel * decay(item.publishedAt) for item in items)
 ```
 
-這個值就直接餵給 [architecture-research.md L401](architecture-research.md#L401) 的 `pressures["media_spotlight"]`。
+這個值就直接餵給 [../01-research.md L401](../01-research.md#L401) 的 `pressures["media_spotlight"]`。
 
 ### 3.5 民調對 Agent 壓力的傳導
 
@@ -267,7 +279,7 @@ def constituency_pressure(agent, topic):
     return gap * urgency * (1 - poll.confidence_penalty)
 ```
 
-### 3.6 媒體新動作集（補進 [architecture-research.md L42-L46](architecture-research.md#L42-L46)）
+### 3.6 媒體新動作集（補進 [../01-research.md L42-L46](../01-research.md#L42-L46)）
 
 ```
 媒體動作：PUBLISH_NEWS, FRAME_STORY, FACT_CHECK, EDITORIAL_ENDORSE
@@ -285,7 +297,7 @@ PoC 階段建議照這個順序刻：
 | 1 | Bill schema 最小版（articles + stanceVector + stage + votes） | 1 天 |
 | 2 | Clock config + 三層時鐘 hook（先 round/day 兩層） | 0.5 天 |
 | 3 | 單一 media outlet + spotlight 簡化版（用聚合公式而非完整 Agent） | 1 天 |
-| 4 | 跑 [PoC 場景](architecture-research.md#L508-L514)，驗證 spotlight → 壓力 → 改票 的迴路是否通 | 1-2 天 |
+| 4 | 跑 [PoC 場景](../01-research.md#L508-L514)，驗證 spotlight → 壓力 → 改票 的迴路是否通 | 1-2 天 |
 
 完整媒體 Agent、版本鏈、term-level 時鐘可以等 PoC 之後再補。
 
@@ -293,7 +305,7 @@ PoC 階段建議照這個順序刻：
 
 ## 5. 與其他缺口的連動
 
-| 本文設計項 | 同時解決 [architecture-gaps.md](architecture-gaps.md) 缺口 |
+| 本文設計項 | 同時解決 [../02-gaps.md](../02-gaps.md) 缺口 |
 |-----------|--------------------------------------------|
 | Bill schema | #1 法案資料模型 |
 | 三層時鐘 + τ 公式 | #2 時間模型 |

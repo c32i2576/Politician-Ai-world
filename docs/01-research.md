@@ -1,6 +1,7 @@
 # 政治模擬世界：架構研究
 
-> 研究日期：2026-04-28  
+> 版本：1 ｜ 研究日期：2026-04-28 ｜ 狀態：current
+> 缺口分析見 [02-gaps.md](02-gaps.md)；已釘下的子系統設計見 [design/](design/)
 > 參考專案：[MiroFish](../../../MiroFish)（社群輿論 AI 預測引擎）、[Politician-skill](../../../Politician-skill)、[ai-town](../../../ai-town)（多 Agent 即時模擬引擎）
 
 ---

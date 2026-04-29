@@ -1,7 +1,7 @@
 # 架構研究：不足之處分析
 
-> 分析日期：2026-04-29
-> 對應文件：[architecture-research.md](architecture-research.md)
+> 版本：1 ｜ 更新日期：2026-04-29 ｜ 狀態：current
+> 對應文件：[01-research.md](01-research.md)
 > 目的：列出現行架構研究的設計盲點與待補項，作為進入實作前的 checklist
 
 ---
@@ -15,7 +15,9 @@
 - 委員會路徑
 - 表決階段（一讀／二讀／三讀）
 
-法案是引擎要動起來的最核心物件，比 stance schema 還重要，但 [架構分層](architecture-research.md#L76-L113) 與 [Convex schema 草稿](architecture-research.md#L484-L503) 都沒列。
+法案是引擎要動起來的最核心物件，比 stance schema 還重要，但 [架構分層](01-research.md#L76-L113) 與 [Convex schema 草稿](01-research.md#L484-L503) 都沒列。
+
+> **狀態：已解決** — 見 [design/bill-model.md](design/bill-model.md)（條文結構化 + `stanceVector` 投影 + `expiresAtSession` 綁 session id）。
 
 ### 2. 時間／會期模型未定義
 文件多次出現「每輪」、「會期」、「tick 1 Hz」，但三者怎麼對應？
@@ -23,7 +25,9 @@
 - 會期切換的觸發條件是什麼？
 - 選舉週期如何介入？
 
-直接影響 stance 的 `time_decay` 公式（[L411](architecture-research.md#L411) 提到但未定義）和 reflect 觸發頻率。
+直接影響 stance 的 `time_decay` 公式（[L411](01-research.md#L411) 提到但未定義）和 reflect 觸發頻率。
+
+> **狀態：已解決** — 見 [design/time-model.md](design/time-model.md)（事件驅動 session + per-topic λ 衰減 + tick 不綁實時）。
 
 ### 3. 媒體 Agent 與輿論層完全缺席
 動作集裡有 `LEAK_TO_MEDIA`、`PUBLISH_POLL`、`RUN_AD_CAMPAIGN`，但：
@@ -31,10 +35,12 @@
 - 輿論值怎麼生成？
 - `media_spotlight` 的數值從哪來？
 
-[壓力函數](architecture-research.md#L396-L413) 用了 `media_spotlight` 變數但沒有產生來源。
+[壓力函數](01-research.md#L396-L413) 用了 `media_spotlight` 變數但沒有產生來源。
+
+> **狀態：已解決** — 見 [design/media-model.md](design/media-model.md)（三通道架構 + `apply_news_to_opinion` + `get_spotlight` 釘死壓力函數源頭）。
 
 ### 4. 「選民層」只在概念上存在
-[L128](architecture-research.md#L128) 提到「程序性生成的選民」與議員雙層分開處理，但下列細節都沒寫：
+[L128](01-research.md#L128) 提到「程序性生成的選民」與議員雙層分開處理，但下列細節都沒寫：
 - 選民 Agent 的行為模型
 - 規模與聚合方式（個體還是統計分布？）
 - 與議員的耦合介面
@@ -44,8 +50,8 @@
 ## 二、評估與驗收（沒有它就無法判斷成功）
 
 ### 5. PoC 的關鍵指標未定義
-- [L514](architecture-research.md#L514) 寫「行為一致性分數（預期立場 vs 實際投票）」
-- [L521](architecture-research.md#L521) 寫「偏差軌跡是否符合直覺」
+- [L514](01-research.md#L514) 寫「行為一致性分數（預期立場 vs 實際投票）」
+- [L521](01-research.md#L521) 寫「偏差軌跡是否符合直覺」
 
 兩者都沒有計算方式、閾值、判定為通過／失敗的標準。「符合直覺」尤其無法落地驗收。
 
@@ -65,7 +71,7 @@
 - 選項 C（PoC）裡甚至沒列「成本驗證」這項
 
 ### 8. Reflect 沒有節流機制
-[L221-L229](architecture-research.md#L221-L229) 直接照搬 Reverie 的「重要性閾值觸發」。問題：
+[L221-L229](01-research.md#L221-L229) 直接照搬 Reverie 的「重要性閾值觸發」。問題：
 - 政治場景高張力時 importance 會爆
 - 每個 Agent 同時 reflect 會把成本拉到不可預期
 - 需要 per-agent 冷卻或全局節流
@@ -86,8 +92,8 @@
 ## 四、與 Politician-skill 的銜接
 
 ### 11. profile → Agent 的具體 schema 缺失
-- [L21](architecture-research.md#L21) 寫「六軌研究輸出即為 profile 來源」
-- [L388](architecture-research.md#L388) 用了 `backbone: 0.3`
+- [L21](01-research.md#L21) 寫「六軌研究輸出即為 profile 來源」
+- [L388](01-research.md#L388) 用了 `backbone: 0.3`
 - 但 Politician-skill 怎麼產出 `backbone`、`hidden_stance` 各維度數值？
 
 方法論、信度、欄位對照表都沒寫。這是兩個專案的整合點，不能模糊。
@@ -116,7 +122,7 @@
 Reverie 用 `vision_r` 處理空間可見性，政治場景需要的是「角色關係 + 場合」的可見性矩陣。
 
 ### 14. 派系動態過度簡化
-[L68-L72](architecture-research.md#L68-L72) 「立場相近自動形成聯盟」忽略：
+[L68-L72](01-research.md#L68-L72) 「立場相近自動形成聯盟」忽略：
 - 歷史恩怨
 - 世代
 - 地域
@@ -138,17 +144,17 @@ Reverie 用 `vision_r` 處理空間可見性，政治場景需要的是「角色
 
 ### 16. 在地化／規則可配置性
 - 台灣立法院、美國國會、英國下議院的議事規則差異巨大
-- `InstitutionalRules` 寫死常數（[L52-L57](architecture-research.md#L52-L57)）等於只能模擬一種制度
+- `InstitutionalRules` 寫死常數（[L52-L57](01-research.md#L52-L57)）等於只能模擬一種制度
 - 要不要支援 rule-pack 切換？
 
 ### 17. 可重現性／隨機種子
 - LLM 採樣本身有隨機性
 - 加上 tick 順序、reflect 觸發，重跑同一組輸入結果會不同
-- 實驗對比（[PoC 第 5 步](architecture-research.md#L513)「修改民調壓力 → 重跑 → 觀察」）需要種子控制方案
+- 實驗對比（[PoC 第 5 步](01-research.md#L513)「修改民調壓力 → 重跑 → 觀察」）需要種子控制方案
 - 文件沒談
 
 ### 18. 前端互動定位不清
-[L110-L112](architecture-research.md#L110-L112) 列了三個視覺化元件，但使用者是：
+[L110-L112](01-research.md#L110-L112) 列了三個視覺化元件，但使用者是：
 - 被動觀察？
 - 可以注入事件？
 - 扮演某個 Agent？
@@ -172,20 +178,20 @@ Reverie 用 `vision_r` 處理空間可見性，政治場景需要的是「角色
 
 ---
 
-## 待辦索引（對照 architecture-research.md 章節）
+## 待辦索引（對照 01-research.md 章節）
 
 | 章節 | 不足項編號 |
 |------|----------|
-| [政治平台動作集](architecture-research.md#L39-L46) | #12 |
-| [制度規則引擎](architecture-research.md#L48-L57) | #16 |
-| [動態派系形成](architecture-research.md#L68-L72) | #14 |
-| [整體架構分層](architecture-research.md#L76-L113) | #1, #2, #18 |
-| [Generative Agents 認知迴圈](architecture-research.md#L142-L170) | #7, #8 |
-| [三層記憶結構](architecture-research.md#L174-L208) | #13 |
-| [Reflect 模組](architecture-research.md#L211-L232) | #8 |
-| [實作路徑選項](architecture-research.md#L338-L367) | #7 |
-| [雙層立場架構](architecture-research.md#L375-L391) | #11 |
-| [壓力函數](architecture-research.md#L394-L413) | #2, #3 |
-| [Convex schema 草稿](architecture-research.md#L482-L503) | #1 |
-| [PoC 驗證場景](architecture-research.md#L506-L522) | #5, #6, #10, #17 |
+| [政治平台動作集](01-research.md#L39-L46) | #12 |
+| [制度規則引擎](01-research.md#L48-L57) | #16 |
+| [動態派系形成](01-research.md#L68-L72) | #14 |
+| [整體架構分層](01-research.md#L76-L113) | #1, #2, #18 |
+| [Generative Agents 認知迴圈](01-research.md#L142-L170) | #7, #8 |
+| [三層記憶結構](01-research.md#L174-L208) | #13 |
+| [Reflect 模組](01-research.md#L211-L232) | #8 |
+| [實作路徑選項](01-research.md#L338-L367) | #7 |
+| [雙層立場架構](01-research.md#L375-L391) | #11 |
+| [壓力函數](01-research.md#L394-L413) | #2, #3 |
+| [Convex schema 草稿](01-research.md#L482-L503) | #1 |
+| [PoC 驗證場景](01-research.md#L506-L522) | #5, #6, #10, #17 |
 | 全域（未涵蓋） | #4, #9, #15 |
