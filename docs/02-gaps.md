@@ -55,6 +55,8 @@
 
 兩者都沒有計算方式、閾值、判定為通過／失敗的標準。「符合直覺」尤其無法落地驗收。
 
+> **狀態：已解決** — 見 [design/observability-model.md](design/observability-model.md)（`behavior_consistency_score` 門檻 ≥ 0.70；`stance_drift_analysis` 以 high_backbone < low_backbone 為通過條件）。
+
 ### 6. 缺少 ground truth／對標方案
 - 是否打算用真實立法院／國會的歷史投票紀錄反測？
 - Agent 重跑真實法案，預期吻合率多少算成功？
@@ -70,11 +72,15 @@
 - 100 議員、tick 1 Hz、每 tick 多次 LLM 呼叫，每天會燒多少？
 - 選項 C（PoC）裡甚至沒列「成本驗證」這項
 
+> **狀態：已解決** — 見 [design/llm-cost-model.md](design/llm-cost-model.md)（A/B/C 呼叫分級 + 具體成本估算 + 降級策略）。
+
 ### 8. Reflect 沒有節流機制
 [L221-L229](01-research.md#L221-L229) 直接照搬 Reverie 的「重要性閾值觸發」。問題：
 - 政治場景高張力時 importance 會爆
 - 每個 Agent 同時 reflect 會把成本拉到不可預期
 - 需要 per-agent 冷卻或全局節流
+
+> **狀態：已解決** — 見 [design/llm-cost-model.md](design/llm-cost-model.md)（三層節流：per-agent cooldown + global cap + 優先佇列）。
 
 ### 9. 無效動作／無限循環的容錯策略
 - LLM 回傳語法錯誤的動作怎麼辦？
@@ -97,6 +103,8 @@
 - 但 Politician-skill 怎麼產出 `backbone`、`hidden_stance` 各維度數值？
 
 方法論、信度、欄位對照表都沒寫。這是兩個專案的整合點，不能模糊。
+
+> **狀態：已解決** — 見 [design/politician-skill-contract.md](design/politician-skill-contract.md)（欄位映射表 + backbone 推導公式 + 版本更新策略）。
 
 ---
 
@@ -160,6 +168,18 @@ Reverie 用 `vision_r` 處理空間可見性，政治場景需要的是「角色
 - 扮演某個 Agent？
 
 這影響整個 input pipeline 設計。
+
+> **狀態：已解決** — 見 [design/product-positioning.md](design/product-positioning.md)。兩層介面：研究者用 Research Observatory（觀察 + 注入）；遊戲開發者用 SDK/API 層（不依賴前端）。
+
+### 19. 外部事件注入介面缺失
+
+架構圖的所有動作都由 Agent 內部產生。但研究者需要：
+- 注入情境事件（世界事件 → 觀察 Agent 反應）
+- 在測試時直接覆蓋 world state（修改民調壓力、強制法案推進）
+
+兩條管道性質不同，混用會讓「自然發展」與「研究者介入」無法區分，實驗無法重現。
+
+> **狀態：已解決** — 見 [design/external-event-model.md](design/external-event-model.md)（雙通道 + `processedAtTick` 稽核紀錄）。
 
 ---
 

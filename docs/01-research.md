@@ -2,7 +2,7 @@
 
 > 版本：1 ｜ 研究日期：2026-04-28 ｜ 狀態：current
 > 缺口分析見 [02-gaps.md](02-gaps.md)；已釘下的子系統設計見 [design/](design/)
-> 參考專案：[MiroFish](../../../MiroFish)（社群輿論 AI 預測引擎）、[Politician-skill](../../../Politician-skill)、[ai-town](../../../ai-town)（多 Agent 即時模擬引擎）
+> 參考專案：[MiroFish](https://github.com/666ghj/MiroFish)（社群輿論 AI 預測引擎）、[Politician-skill](../../../Politician-skill)、[ai-town](https://github.com/a16z-infra/ai-town)（多 Agent 即時模擬引擎）、[generative_agents](https://github.com/joonspk-research/generative_agents)（Stanford Reverie，認知迴圈與記憶結構原作）
 
 ---
 
@@ -13,7 +13,7 @@
 
 ---
 
-## MiroFish 可複用的設計模式
+## MiroFish（repo: [MiroFish](https://github.com/666ghj/MiroFish)）可複用的設計模式
 
 | 模組 | MiroFish 做法 | 政治模擬借用方式 |
 |------|--------------|-----------------|
@@ -134,10 +134,10 @@ class InstitutionalRules:
 
 ---
 
-## Generative Agents（Stanford Reverie）可借用的設計模式
+## Generative Agents（repo: [generative_agents](https://github.com/joonspk-research/generative_agents)）可借用的設計模式
 
 > 原作：Joon Sung Park et al. (2023)「Generative Agents: Interactive Simulacra of Human Behavior」  
-> 程式碼：`reverie/backend_server/`（Python）
+> 程式碼：`generative_agents/reverie/backend_server/`（Python）
 
 ### 核心認知迴圈
 
@@ -269,7 +269,7 @@ sim_B = ReverieServer("base_parliament_session1", "scenario_B_tax_bill_fail")
 
 ---
 
-## ai-town 可借用的技術模式
+## ai-town（repo: [ai-town](https://github.com/a16z-infra/ai-town)）可借用的技術模式
 
 ai-town 是以 **Convex** 為後端的即時多 Agent 模擬引擎，架構比 CAMEL OASIS 更乾淨、TypeScript-first，適合做為替代或補充選項。
 

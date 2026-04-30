@@ -1,6 +1,6 @@
 # 文件索引
 
-> 更新日期：2026-04-29
+> 更新日期：2026-04-30
 
 ## 閱讀順序
 
@@ -9,8 +9,9 @@
 1. [00-conventions.md](00-conventions.md) — **動文件前必讀**：版號、命名、歸檔規範
 2. [01-research.md](01-research.md) — 架構研究原文（總覽、分層、認知迴圈、壓力函數、PoC 場景）
 3. [02-gaps.md](02-gaps.md) — 缺口分析（18 項待補項，每項標註「已解決／未解決」）
-4. `design/` — 已釘下的子系統設計（每個子系統一份檔，當前版號）
-5. `archive/` — 被取代的歷史版本（只看交叉引用時才需要）
+4. [03-project-references.md](03-project-references.md) — 三個本地參考專案的技術索引（模組路徑 × 缺口對應）
+5. `design/` — 已釘下的子系統設計（每個子系統一份檔，當前版號）
+6. `archive/` — 被取代的歷史版本（只看交叉引用時才需要）
 
 ---
 
@@ -22,10 +23,15 @@ docs/
 ├── 00-conventions.md               文件撰寫規範（動檔前必讀）
 ├── 01-research.md                  架構研究原文（v1）
 ├── 02-gaps.md                      缺口分析（v1）
+├── 03-project-references.md        參考專案技術索引（v1）
 ├── design/                         子系統設計（current 版本）
 │   ├── bill-model.md               法案資料模型 v1
 │   ├── time-model.md               時間／會期模型 v2（事件驅動）
-│   └── media-model.md              媒體與輿論層 v2（三通道）
+│   ├── media-model.md              媒體與輿論層 v2（三通道）
+│   ├── external-event-model.md     外部事件注入 v1（雙通道 + 稽核）
+│   ├── politician-skill-contract.md  Politician-skill 整合合約 v1（欄位映射 + backbone 推導）
+│   ├── observability-model.md       可觀測性模型 v1（三張表 + PoC 驗收指標）
+│   └── product-positioning.md       產品定位 v1（研究者 + 遊戲開發者，兩層介面）
 └── archive/                        歷史版本（已被取代）
     └── design-priority-three.md    v1 三合一設計檔（§1 抽出至 bill-model；§2 §3 已被 v2 取代）
 ```
@@ -41,21 +47,22 @@ docs/
 | 1 | 法案資料模型 | ✅ 已解決 | [design/bill-model.md](design/bill-model.md) |
 | 2 | 時間／會期模型 | ✅ 已解決 | [design/time-model.md](design/time-model.md) |
 | 3 | 媒體 Agent 與輿論層 | ✅ 已解決 | [design/media-model.md](design/media-model.md) |
+| 19 | 外部事件注入介面 | ✅ 已解決 | [design/external-event-model.md](design/external-event-model.md) |
 | 4 | 選民層 | ⏳ 未解決 | — |
-| 5 | PoC 關鍵指標 | ⏳ 未解決 | — |
+| 5 | PoC 關鍵指標 | ✅ 已解決 | [design/observability-model.md](design/observability-model.md) |
 | 6 | ground truth／對標 | ⏳ 未解決 | — |
-| 7 | LLM 成本估算 | ⏳ 未解決 | — |
-| 8 | Reflect 節流 | ⏳ 未解決 | — |
+| 7 | LLM 成本估算 | ✅ 已解決 | [design/llm-cost-model.md](design/llm-cost-model.md) |
+| 8 | Reflect 節流 | ✅ 已解決 | [design/llm-cost-model.md](design/llm-cost-model.md) |
 | 9 | 容錯策略 | ⏳ 未解決 | — |
 | 10 | 冷啟動 | ⏳ 未解決 | — |
-| 11 | profile → Agent schema | ⏳ 未解決 | — |
+| 11 | profile → Agent schema | ✅ 已解決 | [design/politician-skill-contract.md](design/politician-skill-contract.md) |
 | 12 | 灰色地帶動作集 | ⏳ 未解決 | — |
 | 13 | 資訊可見性模型 | ⏳ 未解決 | — |
 | 14 | 派系動態 | ⏳ 未解決 | — |
 | 15 | 倫理／責任邊界 | ⏳ 未解決 | — |
 | 16 | 規則可配置性 | ⏳ 未解決 | — |
 | 17 | 可重現性／隨機種子 | ⏳ 未解決 | — |
-| 18 | 前端互動定位 | ⏳ 未解決 | — |
+| 18 | 前端互動定位 | ✅ 已解決 | [design/product-positioning.md](design/product-positioning.md) |
 
 ---
 
